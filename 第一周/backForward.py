@@ -54,8 +54,8 @@ def backprop(x, y):
         z = zs[-l]
         sp = sigmod_der(z)
         delta_l = np.dot(weights[-l + 1].T, delta_l) * sp
-        delta_b[-l] = delta_l
-        delta_w[-l] = np.dot(delta_l, activarions[-l - 1].T)
+        delta_b[-l] = delta_l  # 对l层偏置b的偏导
+        delta_w[-l] = np.dot(delta_l, activarions[-l - 1].T)  # 在l层权值w的偏导
 
     return delta_w, delta_b
 
@@ -70,4 +70,10 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    z = [[2, -1, 5, -1], [3, -1, 4, 4]]
+    z = np.array(z)
+    a = np.ones(z.shape)
+    np.maximum()
+    a[z <= 0] = 0
+    print(a)
