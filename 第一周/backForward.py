@@ -51,9 +51,7 @@ def backprop(x, y):
     delta_l = delta_L
     for l in range(2, num_layers):
         # 计算第一层误差
-        z = zs[-l]
-        sp = sigmod_der(z)
-        delta_l = np.dot(weights[-l + 1].T, delta_l) * sp
+        delta_l = np.dot(weights[-l + 1].T, delta_l) * sigmod_der(zs[-l])
         delta_b[-l] = delta_l  # 对l层偏置b的偏导
         delta_w[-l] = np.dot(delta_l, activarions[-l - 1].T)  # 在l层权值w的偏导
 
