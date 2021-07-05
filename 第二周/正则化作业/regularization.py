@@ -69,12 +69,14 @@ def model(X, Y, learning_rate=0.3, num_iterations=30000, print_cost=True, lambd=
 
     return parameters
 
-print ("baseline")
+
+print("baseline")
 parameters = model(train_X, train_Y)
-print ("On the training set:")
+print("On the training set:")
 predictions_train = predict(train_X, train_Y, parameters)
-print ("On the test set:")
+print("On the test set:")
 predictions_test = predict(test_X, test_Y, parameters)
+
 
 # GRADED FUNCTION: compute_cost_with_regularization
 
@@ -98,7 +100,10 @@ def compute_cost_with_regularization(A3, Y, parameters, lambd):
     cross_entropy_cost = compute_cost(A3, Y)  # This gives you the cross-entropy part of the cost
 
     ### START CODE HERE ### (approx. 1 line)
-    L2_regularization_cost = None
+    L2_regularization_cost = 0.0
+    for w in parameters:
+        L2_regularization_cost += np.sum(np.square(parameters[w]))
+    L2_regularization_cost = lambd / (2 * m) * L2_regularization_cost
     ### END CODER HERE ###
 
     cost = cross_entropy_cost + L2_regularization_cost
@@ -128,21 +133,21 @@ def backward_propagation_with_regularization(X, Y, cache, lambd):
     dZ3 = A3 - Y
 
     ### START CODE HERE ### (approx. 1 line)
-    dW3 = 1. / m * np.dot(dZ3, A2.T) + None
+    dW3 = 1. / m * np.dot(dZ3, A2.T) + (lambd / m) * W3
     ### END CODE HERE ###
     db3 = 1. / m * np.sum(dZ3, axis=1, keepdims=True)
 
     dA2 = np.dot(W3.T, dZ3)
     dZ2 = np.multiply(dA2, np.int64(A2 > 0))
     ### START CODE HERE ### (approx. 1 line)
-    dW2 = 1. / m * np.dot(dZ2, A1.T) + None
+    dW2 = 1. / m * np.dot(dZ2, A1.T) + (lambd / m) * W2
     ### END CODE HERE ###
     db2 = 1. / m * np.sum(dZ2, axis=1, keepdims=True)
 
     dA1 = np.dot(W2.T, dZ2)
     dZ1 = np.multiply(dA1, np.int64(A1 > 0))
     ### START CODE HERE ### (approx. 1 line)
-    dW1 = 1. / m * np.dot(dZ1, X.T) + None
+    dW1 = 1. / m * np.dot(dZ1, X.T) + (lambd / m) * W1
     ### END CODE HERE ###
     db1 = 1. / m * np.sum(dZ1, axis=1, keepdims=True)
 
@@ -152,11 +157,12 @@ def backward_propagation_with_regularization(X, Y, cache, lambd):
 
     return gradients
 
+
 print("model with L2 regularization")
-parameters = model(train_X, train_Y, lambd = 0.7)
-print ("On the train set:")
+parameters = model(train_X, train_Y, lambd=0.7)
+print("On the train set:")
 predictions_train = predict(train_X, train_Y, parameters)
-print ("On the test set:")
+print("On the test set:")
 predictions_test = predict(test_X, test_Y, parameters)
 
 
@@ -194,18 +200,18 @@ def forward_propagation_with_dropout(X, parameters, keep_prob=0.5):
     Z1 = np.dot(W1, X) + b1
     A1 = relu(Z1)
     ### START CODE HERE ### (approx. 4 lines)         # Steps 1-4 below correspond to the Steps 1-4 described above.
-    D1 = None  # Step 1: initialize matrix D1 = np.random.rand(..., ...)
-    D1 = None  # Step 2: convert entries of D1 to 0 or 1 (using keep_prob as the threshold)
-    A1 = None  # Step 3: shut down some neurons of A1
-    A1 = None  # Step 4: scale the value of neurons that haven't been shut down
+    D1 = np.random.rand(A1.shape[0],A1.shape[1])  # Step 1: initialize matrix D1 = np.random.rand(..., ...)
+    D1 = D1 < keep_prob  # Step 2: convert entries of D1 to 0 or 1 (using keep_prob as the threshold)
+    A1 = np.multiply(A1, D1)  # Step 3: shut down some neurons of A1
+    A1 /= keep_prob  # Step 4: scale the value of neurons that haven't been shut down
     ### END CODE HERE ###
     Z2 = np.dot(W2, A1) + b2
     A2 = relu(Z2)
     ### START CODE HERE ### (approx. 4 lines)
-    D2 = None  # Step 1: initialize matrix D2 = np.random.rand(..., ...)
-    D2 = None  # Step 2: convert entries of D2 to 0 or 1 (using keep_prob as the threshold)
-    A2 = None  # Step 3: shut down some neurons of A2
-    A2 = None  # Step 4: scale the value of neurons that haven't been shut down
+    D2 = np.random.rand(A2.shape[0],A1.shape[1])  # Step 1: initialize matrix D2 = np.random.rand(..., ...)
+    D2 = D2 < keep_prob  # Step 2: convert entries of D2 to 0 or 1 (using keep_prob as the threshold)
+    A2 = np.multiply(A2, D2)  # Step 3: shut down some neurons of A2
+    A2 /= keep_prob  # Step 4: scale the value of neurons that haven't been shut down
     ### END CODE HERE ###
     Z3 = np.dot(W3, A2) + b3
     A3 = sigmoid(Z3)
@@ -239,8 +245,8 @@ def backward_propagation_with_dropout(X, Y, cache, keep_prob):
     db3 = 1. / m * np.sum(dZ3, axis=1, keepdims=True)
     dA2 = np.dot(W3.T, dZ3)
     ### START CODE HERE ### (≈ 2 lines of code)
-    dA2 = None  # Step 1: Apply mask D2 to shut down the same neurons as during the forward propagation
-    dA2 = None  # Step 2: Scale the value of neurons that haven't been shut down
+    dA2 = np.multiply(dA2, D2)  # Step 1: Apply mask D2 to shut down the same neurons as during the forward propagation
+    dA2 /= keep_prob  # Step 2: Scale the value of neurons that haven't been shut down
     ### END CODE HERE ###
     dZ2 = np.multiply(dA2, np.int64(A2 > 0))
     dW2 = 1. / m * np.dot(dZ2, A1.T)
@@ -248,8 +254,8 @@ def backward_propagation_with_dropout(X, Y, cache, keep_prob):
 
     dA1 = np.dot(W2.T, dZ2)
     ### START CODE HERE ### (≈ 2 lines of code)
-    dA1 = None  # Step 1: Apply mask D1 to shut down the same neurons as during the forward propagation
-    dA1 = None  # Step 2: Scale the value of neurons that haven't been shut down
+    dA1 = np.multiply(dA1, D1)  # Step 1: Apply mask D1 to shut down the same neurons as during the forward propagation
+    dA1 /= keep_prob  # Step 2: Scale the value of neurons that haven't been shut down
     ### END CODE HERE ###
     dZ1 = np.multiply(dA1, np.int64(A1 > 0))
     dW1 = 1. / m * np.dot(dZ1, X.T)
@@ -261,9 +267,10 @@ def backward_propagation_with_dropout(X, Y, cache, keep_prob):
 
     return gradients
 
-parameters = model(train_X, train_Y, keep_prob = 0.86, learning_rate = 0.3)
+print("model with dropout")
+parameters = model(train_X, train_Y, keep_prob=0.86, learning_rate=0.3)
 
-print ("On the train set:")
+print("On the train set:")
 predictions_train = predict(train_X, train_Y, parameters)
-print ("On the test set:")
+print("On the test set:")
 predictions_test = predict(test_X, test_Y, parameters)
