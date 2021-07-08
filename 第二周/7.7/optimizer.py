@@ -25,6 +25,11 @@ def SGD(learning_rate):
     sgd_w, sgd_b = 0, 0
     for i in range(1, 100):
         loss = 0
+        # Y_hat = sgd_w * X + sgd_b
+        # m = X.shape[0]
+        # loss = np.sum((Y - Y_hat) ** 2) / (2 * m)
+        # sgd_w = sgd_w - learning_rate * (Y_hat - Y) / m * X
+        # sgd_b = sgd_b - learning_rate * (Y_hat - Y) / m
         for x, y in zip(X, Y):
             y_hat = sgd_w * x + sgd_b
             loss += (y - y_hat) ** 2 / 2
@@ -97,6 +102,6 @@ def Adam(learning_rate, beta1, beta2):
 
 
 SGD(0.001)
-Momentum(0.001, 0.9)
-RMSprop(0.001, 0.9)
-Adam(0.001, 0.9, 0.999)
+# Momentum(0.001, 0.9)
+# RMSprop(0.001, 0.9)
+# Adam(0.001, 0.9, 0.999)
