@@ -21,7 +21,7 @@ def model(X, Y, learning_rate=0.3, num_iterations=30000, print_cost=True, lambd=
     keep_prob - probability of keeping a neuron active during drop-out, scalar.
 
     Returns:
-    parameters -- parameters learned by the model. They can then be used to predict.
+    parameters -- parameters learned by the mymodel. They can then be used to predict.
     """
 
     grads = {}
@@ -87,7 +87,7 @@ def compute_cost_with_regularization(A3, Y, parameters, lambd):
     Arguments:
     A3 -- post-activation, output of forward propagation, of shape (output size, number of examples)
     Y -- "true" labels vector, of shape (output size, number of examples)
-    parameters -- python dictionary containing parameters of the model
+    parameters -- python dictionary containing parameters of the mymodel
 
     Returns:
     cost - value of the regularized loss function (formula (2))
@@ -115,7 +115,7 @@ def compute_cost_with_regularization(A3, Y, parameters, lambd):
 
 def backward_propagation_with_regularization(X, Y, cache, lambd):
     """
-    Implements the backward propagation of our baseline model to which we added an L2 regularization.
+    Implements the backward propagation of our baseline mymodel to which we added an L2 regularization.
 
     Arguments:
     X -- input dataset, of shape (input size, number of examples)
@@ -158,7 +158,7 @@ def backward_propagation_with_regularization(X, Y, cache, lambd):
     return gradients
 
 
-print("model with L2 regularization")
+print("mymodel with L2 regularization")
 parameters = model(train_X, train_Y, lambd=0.7)
 print("On the train set:")
 predictions_train = predict(train_X, train_Y, parameters)
@@ -225,7 +225,7 @@ def forward_propagation_with_dropout(X, parameters, keep_prob=0.5):
 
 def backward_propagation_with_dropout(X, Y, cache, keep_prob):
     """
-    Implements the backward propagation of our baseline model to which we added dropout.
+    Implements the backward propagation of our baseline mymodel to which we added dropout.
 
     Arguments:
     X -- input dataset, of shape (2, number of examples)
@@ -268,7 +268,7 @@ def backward_propagation_with_dropout(X, Y, cache, keep_prob):
     return gradients
 
 
-print("model with dropout")
+print("mymodel with dropout")
 parameters = model(train_X, train_Y, keep_prob=0.86, learning_rate=0.3)
 
 print("On the train set:")

@@ -72,7 +72,7 @@ def initialize_parameters(layer_dims):
                     bl -- bias vector of shape (1, layer_dims[l])
                     
     Tips:
-    - For example: the layer_dims for the "Planar Data classification model" would have been [2,2,1]. 
+    - For example: the layer_dims for the "Planar Data classification mymodel" would have been [2,2,1].
     This means W1's shape was (2,2), b1 was (1,2), W2 was (2,1) and b2 was (1,1). Now you have to generalize it!
     - In the for loop, use parameters['W' + str(l)] to access Wl, where l is the iterative integer.
     """
@@ -199,7 +199,7 @@ def predict(X, y, parameters):
     
     Arguments:
     X -- data set of examples you would like to label
-    parameters -- parameters of the trained model
+    parameters -- parameters of the trained mymodel
     
     Returns:
     p -- predictions for the given dataset X
@@ -278,7 +278,7 @@ def predict_dec(parameters, X):
     X -- input data of size (m, K)
     
     Returns
-    predictions -- vector of predictions of our model (red: 0 / blue: 1)
+    predictions -- vector of predictions of our mymodel (red: 0 / blue: 1)
     """
 
     # Predict using forward propagation and a classification threshold of 0.5
